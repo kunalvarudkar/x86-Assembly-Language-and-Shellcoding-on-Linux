@@ -3,6 +3,13 @@
 
 ; Program for learning how logical instructions (AND, OR, XOR, NOT) works in x86 Architecture using Assembly language.
 
+; XOR Property:
+; If there are 3 numbers A,B,C such that
+; A XOR B --> C
+; C XOR B --> A
+; C XOR A --> B
+; This property is what we exploit while writing a XOR encoder
+
 global _start
 
 section .text
