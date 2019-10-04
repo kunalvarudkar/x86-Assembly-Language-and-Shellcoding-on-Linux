@@ -1,0 +1,210 @@
+(gdb) disassemble 
+Dump of assembler code for function _start:
+=> 0x08048080 <+0>:	mov    al,0x12
+   0x08048082 <+2>:	and    al,0x2
+   0x08048084 <+4>:	and    BYTE PTR ds:0x80490d0,0xbb
+   0x0804808b <+11>:	and    WORD PTR ds:0x80490d1,0x2233
+   0x08048094 <+20>:	mov    al,0x11
+   0x08048096 <+22>:	or     al,0x2
+   0x08048098 <+24>:	or     BYTE PTR ds:0x80490d0,0x11
+   0x0804809f <+31>:	mov    eax,0x0
+   0x080480a4 <+36>:	or     eax,0x0
+   0x080480a7 <+39>:	xor    DWORD PTR ds:0x80490d3,0x11223344
+   0x080480b1 <+49>:	xor    DWORD PTR ds:0x80490d3,0x11223344
+   0x080480bb <+59>:	mov    eax,0xffffffff
+   0x080480c0 <+64>:	not    eax
+   0x080480c2 <+66>:	not    eax
+   0x080480c4 <+68>:	mov    eax,0x1
+   0x080480c9 <+73>:	mov    ebx,0x2
+   0x080480ce <+78>:	int    0x80
+End of assembler dump.
+(gdb) nexti
+Dump of assembler code from 0x8048082 to 0x804808c:
+=> 0x08048082 <_start+2>:	and    al,0x2
+   0x08048084 <_start+4>:	and    BYTE PTR ds:0x80490d0,0xbb
+   0x0804808b <_start+11>:	and    WORD PTR ds:0x80490d1,0x2233
+End of assembler dump.
+0x08048082 in _start ()
+1: x/xb &var1  0x80490d0:	0xaa
+2: x/xh &var2  0x80490d1:	0xaabb
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x12
+5: /x $al = 0x12
+(gdb) nexti
+Dump of assembler code from 0x8048084 to 0x804808e:
+=> 0x08048084 <_start+4>:	and    BYTE PTR ds:0x80490d0,0xbb
+   0x0804808b <_start+11>:	and    WORD PTR ds:0x80490d1,0x2233
+End of assembler dump.
+0x08048084 in _start ()
+1: x/xb &var1  0x80490d0:	0xaa
+2: x/xh &var2  0x80490d1:	0xaabb
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x2
+5: /x $al = 0x2
+(gdb) nexti
+Dump of assembler code from 0x804808b to 0x8048095:
+=> 0x0804808b <_start+11>:	and    WORD PTR ds:0x80490d1,0x2233
+   0x08048094 <_start+20>:	mov    al,0x11
+End of assembler dump.
+0x0804808b in _start ()
+1: x/xb &var1  0x80490d0:	0xaa
+2: x/xh &var2  0x80490d1:	0xaabb
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x2
+5: /x $al = 0x2
+(gdb) nexti
+Dump of assembler code from 0x8048094 to 0x804809e:
+=> 0x08048094 <_start+20>:	mov    al,0x11
+   0x08048096 <_start+22>:	or     al,0x2
+   0x08048098 <_start+24>:	or     BYTE PTR ds:0x80490d0,0x11
+End of assembler dump.
+0x08048094 in _start ()
+1: x/xb &var1  0x80490d0:	0xaa
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x2
+5: /x $al = 0x2
+(gdb) nexti
+Dump of assembler code from 0x8048096 to 0x80480a0:
+=> 0x08048096 <_start+22>:	or     al,0x2
+   0x08048098 <_start+24>:	or     BYTE PTR ds:0x80490d0,0x11
+   0x0804809f <_start+31>:	mov    eax,0x0
+End of assembler dump.
+0x08048096 in _start ()
+1: x/xb &var1  0x80490d0:	0xaa
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x11
+5: /x $al = 0x11
+(gdb) nexti
+Dump of assembler code from 0x8048098 to 0x80480a2:
+=> 0x08048098 <_start+24>:	or     BYTE PTR ds:0x80490d0,0x11
+   0x0804809f <_start+31>:	mov    eax,0x0
+End of assembler dump.
+0x08048098 in _start ()
+1: x/xb &var1  0x80490d0:	0xaa
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x13
+5: /x $al = 0x13
+(gdb) nexti
+Dump of assembler code from 0x804809f to 0x80480a9:
+=> 0x0804809f <_start+31>:	mov    eax,0x0
+   0x080480a4 <_start+36>:	or     eax,0x0
+   0x080480a7 <_start+39>:	xor    DWORD PTR ds:0x80490d3,0x11223344
+End of assembler dump.
+0x0804809f in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x13
+5: /x $al = 0x13
+(gdb) nexti
+Dump of assembler code from 0x80480a4 to 0x80480ae:
+=> 0x080480a4 <_start+36>:	or     eax,0x0
+   0x080480a7 <_start+39>:	xor    DWORD PTR ds:0x80490d3,0x11223344
+End of assembler dump.
+0x080480a4 in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x0
+5: /x $al = 0x0
+(gdb) nexti
+Dump of assembler code from 0x80480a7 to 0x80480b1:
+=> 0x080480a7 <_start+39>:	xor    DWORD PTR ds:0x80490d3,0x11223344
+End of assembler dump.
+0x080480a7 in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x0
+5: /x $al = 0x0
+(gdb) nexti
+Dump of assembler code from 0x80480b1 to 0x80480bb:
+=> 0x080480b1 <_start+49>:	xor    DWORD PTR ds:0x80490d3,0x11223344
+End of assembler dump.
+0x080480b1 in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x00000000
+4: /x $eax = 0x0
+5: /x $al = 0x0
+(gdb) nexti
+Dump of assembler code from 0x80480bb to 0x80480c5:
+=> 0x080480bb <_start+59>:	mov    eax,0xffffffff
+   0x080480c0 <_start+64>:	not    eax
+   0x080480c2 <_start+66>:	not    eax
+   0x080480c4 <_start+68>:	mov    eax,0x1
+End of assembler dump.
+0x080480bb in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x0
+5: /x $al = 0x0
+(gdb) nexti
+Dump of assembler code from 0x80480c0 to 0x80480ca:
+=> 0x080480c0 <_start+64>:	not    eax
+   0x080480c2 <_start+66>:	not    eax
+   0x080480c4 <_start+68>:	mov    eax,0x1
+   0x080480c9 <_start+73>:	mov    ebx,0x2
+End of assembler dump.
+0x080480c0 in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0xffffffff
+5: /x $al = 0xff
+(gdb) nexti
+Dump of assembler code from 0x80480c2 to 0x80480cc:
+=> 0x080480c2 <_start+66>:	not    eax
+   0x080480c4 <_start+68>:	mov    eax,0x1
+   0x080480c9 <_start+73>:	mov    ebx,0x2
+End of assembler dump.
+0x080480c2 in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x0
+5: /x $al = 0x0
+(gdb) nexti
+Dump of assembler code from 0x80480c4 to 0x80480ce:
+=> 0x080480c4 <_start+68>:	mov    eax,0x1
+   0x080480c9 <_start+73>:	mov    ebx,0x2
+End of assembler dump.
+0x080480c4 in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0xffffffff
+5: /x $al = 0xff
+(gdb) nexti
+Dump of assembler code from 0x80480c9 to 0x80480d3:
+=> 0x080480c9 <_start+73>:	mov    ebx,0x2
+   0x080480ce <_start+78>:	int    0x80
+   0x080480d0:	stos   BYTE PTR es:[edi],al
+   0x080480d1:	mov    ebx,0x223344aa
+End of assembler dump.
+0x080480c9 in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x1
+5: /x $al = 0x1
+(gdb) nexti
+Dump of assembler code from 0x80480ce to 0x80480d8:
+=> 0x080480ce <_start+78>:	int    0x80
+   0x080480d0:	stos   BYTE PTR es:[edi],al
+   0x080480d1:	mov    ebx,0x223344aa
+   0x080480d6:	adc    DWORD PTR [eax],eax
+End of assembler dump.
+0x080480ce in _start ()
+1: x/xb &var1  0x80490d0:	0xbb
+2: x/xh &var2  0x80490d1:	0x2233
+3: x/xw &var3  0x80490d3:	0x11223344
+4: /x $eax = 0x1
+5: /x $al = 0x1
+(gdb) nexti
+[Inferior 1 (process 12432) exited with code 02]
+
