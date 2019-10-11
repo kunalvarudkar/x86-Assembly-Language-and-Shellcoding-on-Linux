@@ -1,3 +1,8 @@
+; Program Name: 11_x86_prologue_epilogue.nasm
+; Author: Kunal Varudkar
+
+; Program to illustrate how to use prologue and epilogue in x86 assembly
+
 global _start
 
 section .text
