@@ -1,0 +1,68 @@
+(gdb) nexti
+0xbffff0b0:	0x00000001	0xbffff288	0x00000000	0xbffff2bd
+0xbffff0c0:	0xbffff2c8	0xbffff2da	0xbffff309	0xbffff31f
+Dump of assembler code from 0x804808c to 0x8048096:
+=> 0x0804808c <_start+12>:	pusha  
+   0x0804808d <_start+13>:	pushf  
+   0x0804808e <_start+14>:	mov    eax,0x4
+   0x08048093 <_start+19>:	mov    ebx,0x1
+End of assembler dump.
+0x0804808c in _start ()
+1: /x $eax = 0x200
+2: /x $ebx = 0x20
+3: /x $ecx = 0x0
+4: /x $edc = <error: Value can't be converted to integer.>
+5: /x $edx = 0x0
+6: $ebp = (void *) 0x0
+7: $edi = 0
+8: $esi = 0
+(gdb) nexti
+0xbffff090:	0x00000000	0x00000000	0x00000000	0xbffff0b0
+0xbffff0a0:	0x00000020	0x00000000	0x00000000	0x00000200
+Dump of assembler code from 0x804808d to 0x8048097:
+=> 0x0804808d <_start+13>:	pushf  
+   0x0804808e <_start+14>:	mov    eax,0x4
+   0x08048093 <_start+19>:	mov    ebx,0x1
+End of assembler dump.
+0x0804808d in _start ()
+1: /x $eax = 0x200
+2: /x $ebx = 0x20
+3: /x $ecx = 0x0
+4: /x $edc = <error: Value can't be converted to integer.>
+5: /x $edx = 0x0
+6: $ebp = (void *) 0x0
+7: $edi = 0
+8: $esi = 0
+(gdb) nexti
+0xbffff08c:	0x00000306	0x00000000	0x00000000	0x00000000
+0xbffff09c:	0xbffff0b0	0x00000020	0x00000000	0x00000000
+Dump of assembler code from 0x804808e to 0x8048098:
+=> 0x0804808e <_start+14>:	mov    eax,0x4
+   0x08048093 <_start+19>:	mov    ebx,0x1
+End of assembler dump.
+0x0804808e in _start ()
+1: /x $eax = 0x200
+2: /x $ebx = 0x20
+3: /x $ecx = 0x0
+4: /x $edc = <error: Value can't be converted to integer.>
+5: /x $edx = 0x0
+6: $ebp = (void *) 0x0
+7: $edi = 0
+8: $esi = 0
+(gdb) nexti
+0xbffff08c:	0x00000306	0x00000000	0x00000000	0x00000000
+0xbffff09c:	0xbffff0b0	0x00000020	0x00000000	0x00000000
+Dump of assembler code from 0x8048093 to 0x804809d:
+=> 0x08048093 <_start+19>:	mov    ebx,0x1
+   0x08048098 <_start+24>:	mov    ecx,0x80490b4
+End of assembler dump.
+0x08048093 in _start ()
+1: /x $eax = 0x4
+2: /x $ebx = 0x20
+3: /x $ecx = 0x0
+4: /x $edc = <error: Value can't be converted to integer.>
+5: /x $edx = 0x0
+6: $ebp = (void *) 0x0
+7: $edi = 0
+8: $esi = 0
+
