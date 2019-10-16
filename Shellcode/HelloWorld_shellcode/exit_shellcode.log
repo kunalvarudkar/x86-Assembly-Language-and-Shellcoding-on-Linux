@@ -1,0 +1,583 @@
+(gdb) disassemble 
+Dump of assembler code for function main:
+   0x0804843b <+0>:	lea    ecx,[esp+0x4]
+   0x0804843f <+4>:	and    esp,0xfffffff0
+   0x08048442 <+7>:	push   DWORD PTR [ecx-0x4]
+   0x08048445 <+10>:	push   ebp
+   0x08048446 <+11>:	mov    ebp,esp
+   0x08048448 <+13>:	push   ecx
+=> 0x08048449 <+14>:	sub    esp,0x14
+   0x0804844c <+17>:	sub    esp,0xc
+   0x0804844f <+20>:	push   0x804a040
+   0x08048454 <+25>:	call   0x8048310 <strlen@plt>
+   0x08048459 <+30>:	add    esp,0x10
+   0x0804845c <+33>:	sub    esp,0x8
+   0x0804845f <+36>:	push   eax
+   0x08048460 <+37>:	push   0x8048510
+   0x08048465 <+42>:	call   0x8048300 <printf@plt>
+   0x0804846a <+47>:	add    esp,0x10
+   0x0804846d <+50>:	mov    DWORD PTR [ebp-0xc],0x804a040
+   0x08048474 <+57>:	mov    eax,DWORD PTR [ebp-0xc]
+   0x08048477 <+60>:	call   eax
+   0x08048479 <+62>:	mov    eax,0x0
+   0x0804847e <+67>:	mov    ecx,DWORD PTR [ebp-0x4]
+   0x08048481 <+70>:	leave  
+   0x08048482 <+71>:	lea    esp,[ecx-0x4]
+   0x08048485 <+74>:	ret    
+End of assembler dump.
+(gdb) print/x &code
+$1 = 0x804a040
+(gdb) x/54xb 0x804a040
+0x804a040 <code>:	0xeb	0x15	0x31	0xc0	0xb0	0x04	0x31	0xdb
+0x804a048 <code+8>:	0xb3	0x01	0x59	0x31	0xd2	0xb2	0x1b	0xcd
+0x804a050 <code+16>:	0x80	0x31	0xc0	0xb0	0x01	0xcd	0x80	0xe8
+0x804a058 <code+24>:	0xe6	0xff	0xff	0xff	0x48	0x65	0x6c	0x6c
+0x804a060 <code+32>:	0x6f	0x20	0x77	0x6f	0x72	0x6c	0x64	0x20
+0x804a068 <code+40>:	0x69	0x6e	0x20	0x73	0x68	0x65	0x6c	0x6c
+0x804a070 <code+48>:	0x63	0x6f	0x64	0x65	0x21	0x21
+(gdb) shell cat test_shellcode.c 
+#include<stdio.h>
+#include<string.h>
+
+unsigned char code[] = \
+"\xeb\x15\x31\xc0\xb0\x04\x31\xdb\xb3\x01\x59\x31\xd2\xb2\x1b\xcd\x80\x31\xc0\xb0\x01\xcd\x80\xe8\xe6\xff\xff\xff\x48\x65\x6c\x6c\x6f\x20\x77\x6f\x72\x6c\x64\x20\x69\x6e\x20\x73\x68\x65\x6c\x6c\x63\x6f\x64\x65\x21\x21\x0a";
+
+
+main()
+{
+
+	printf("Shellcode Length= %d\n", strlen(code));
+	int (*ret)() = ( int (*)())code;
+
+	ret();	 
+
+}
+(gdb) disassemble 0x804a040
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+(gdb) x/s 0x0804a057
+0x804a057 <code+23>:	"\350\346\377\377\377Hello world in shellcode!!\n"
+(gdb) x/s 0x0804a05c
+0x804a05c <code+28>:	"Hello world in shellcode!!\n"
+(gdb) break *0x804a040
+Breakpoint 2 at 0x804a040
+(gdb) c
+Continuing.
+Shellcode Length= 55
+
+Breakpoint 2, 0x0804a040 in code ()
+(gdb) disassemble 
+Dump of assembler code for function code:
+=> 0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+(gdb)  define hook-stop
+Type commands for definition of "hook-stop".
+End with a line saying just "end".
+>disassemble 
+>x/xw $esp
+>end
+(gdb) 
+(gdb) disassemble 
+Dump of assembler code for function code:
+=> 0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+(gdb) stepi
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+=> 0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefdc:	0x08048479
+0x0804a057 in code ()
+(gdb) stepi
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+=> 0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefd8:	0x0804a05c
+0x0804a042 in code ()
+(gdb) display/x $eax
+1: /x $eax = 0x804a040
+(gdb) display/x $ebx
+2: /x $ebx = 0x0
+(gdb) display/x $ecx
+3: /x $ecx = 0x7fffffeb
+(gdb) display/x $edx
+4: /x $edx = 0xb7fbb870
+(gdb) stepi
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+=> 0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefd8:	0x0804a05c
+0x0804a044 in code ()
+1: /x $eax = 0x0
+2: /x $ebx = 0x0
+3: /x $ecx = 0x7fffffeb
+4: /x $edx = 0xb7fbb870
+(gdb) 
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+=> 0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefd8:	0x0804a05c
+0x0804a046 in code ()
+1: /x $eax = 0x4
+2: /x $ebx = 0x0
+3: /x $ecx = 0x7fffffeb
+4: /x $edx = 0xb7fbb870
+(gdb) 
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+=> 0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefd8:	0x0804a05c
+0x0804a048 in code ()
+1: /x $eax = 0x4
+2: /x $ebx = 0x0
+3: /x $ecx = 0x7fffffeb
+4: /x $edx = 0xb7fbb870
+(gdb) 
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+=> 0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefd8:	0x0804a05c
+0x0804a04a in code ()
+1: /x $eax = 0x4
+2: /x $ebx = 0x1
+3: /x $ecx = 0x7fffffeb
+4: /x $edx = 0xb7fbb870
+(gdb) 
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+=> 0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefdc:	0x08048479
+0x0804a04b in code ()
+1: /x $eax = 0x4
+2: /x $ebx = 0x1
+3: /x $ecx = 0x804a05c
+4: /x $edx = 0xb7fbb870
+(gdb) 
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+=> 0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefdc:	0x08048479
+0x0804a04d in code ()
+1: /x $eax = 0x4
+2: /x $ebx = 0x1
+3: /x $ecx = 0x804a05c
+4: /x $edx = 0x0
+(gdb) 
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+=> 0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefdc:	0x08048479
+0x0804a04f in code ()
+1: /x $eax = 0x4
+2: /x $ebx = 0x1
+3: /x $ecx = 0x804a05c
+4: /x $edx = 0x1b
+(gdb) 
+Hello world in shellcode!!
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+=> 0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefdc:	0x08048479
+0x0804a051 in code ()
+1: /x $eax = 0x1b
+2: /x $ebx = 0x1
+3: /x $ecx = 0x804a05c
+4: /x $edx = 0x1b
+(gdb) 
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+=> 0x0804a053 <+19>:	mov    al,0x1
+   0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefdc:	0x08048479
+0x0804a053 in code ()
+1: /x $eax = 0x0
+2: /x $ebx = 0x1
+3: /x $ecx = 0x804a05c
+4: /x $edx = 0x1b
+(gdb) 
+Dump of assembler code for function code:
+   0x0804a040 <+0>:	jmp    0x804a057 <code+23>
+   0x0804a042 <+2>:	xor    eax,eax
+   0x0804a044 <+4>:	mov    al,0x4
+   0x0804a046 <+6>:	xor    ebx,ebx
+   0x0804a048 <+8>:	mov    bl,0x1
+   0x0804a04a <+10>:	pop    ecx
+   0x0804a04b <+11>:	xor    edx,edx
+   0x0804a04d <+13>:	mov    dl,0x1b
+   0x0804a04f <+15>:	int    0x80
+   0x0804a051 <+17>:	xor    eax,eax
+   0x0804a053 <+19>:	mov    al,0x1
+=> 0x0804a055 <+21>:	int    0x80
+   0x0804a057 <+23>:	call   0x804a042 <code+2>
+   0x0804a05c <+28>:	dec    eax
+   0x0804a05d <+29>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a05f <+31>:	ins    BYTE PTR es:[edi],dx
+   0x0804a060 <+32>:	outs   dx,DWORD PTR ds:[esi]
+   0x0804a061 <+33>:	and    BYTE PTR [edi+0x6f],dh
+   0x0804a064 <+36>:	jb     0x804a0d2
+   0x0804a066 <+38>:	and    BYTE PTR fs:[ecx+0x6e],ch
+   0x0804a06a <+42>:	and    BYTE PTR [ebx+0x68],dh
+   0x0804a06d <+45>:	gs ins BYTE PTR es:[edi],dx
+   0x0804a06f <+47>:	ins    BYTE PTR es:[edi],dx
+   0x0804a070 <+48>:	arpl   WORD PTR [edi+0x64],bp
+   0x0804a073 <+51>:	and    DWORD PTR gs:[ecx],esp
+   0x0804a076 <+54>:	or     al,BYTE PTR [eax]
+End of assembler dump.
+0xbfffefdc:	0x08048479
+0x0804a055 in code ()
+1: /x $eax = 0x1
+2: /x $ebx = 0x1
+3: /x $ecx = 0x804a05c
+4: /x $edx = 0x1b
+(gdb) 
+[Inferior 1 (process 4584) exited with code 01]
+
