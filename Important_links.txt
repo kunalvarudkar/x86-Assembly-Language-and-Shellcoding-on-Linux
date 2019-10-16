@@ -1,0 +1,4 @@
+https://www.csie.ntu.edu.tw/~cyy/courses/assembly/10fall/lectures/handouts/lec15_x86procedure_4up.pdf
+
+https://www.usna.edu/Users/cs/aviv/classes/si485h/s17/units/04/unit.html#org42891e3 (shell code variant)
+
