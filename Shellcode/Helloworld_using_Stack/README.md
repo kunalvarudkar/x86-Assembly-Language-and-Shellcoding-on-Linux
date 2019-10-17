@@ -13,5 +13,3 @@ later we will mov ecx, esp (pointing the esp to ecx) so that we could print our 
 
 B) Memory layout of stack
 
-
-![alt text](https://raw.githubusercontent.com/kunalvarudkar/x86-Assembly-Language-and-Shellcoding-on-Linux/master/Shellcode/Helloworld_using_Stack/stack_layout.png)
