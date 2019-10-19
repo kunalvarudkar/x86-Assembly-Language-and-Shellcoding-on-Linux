@@ -10,8 +10,6 @@ section .shellcode progbits alloc exec write align=16	; user defined segment, ma
 _start:
 	jmp short call_shellcode
 
-
-
 shellcode:
 
 	pop esi				; pop the string in ESI
