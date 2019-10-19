@@ -1,7 +1,7 @@
 <h2>Execve /bin/sh shellcode</h2>
 
 <b>Problem I faced:</b></br>
-A) I Was using .text segment for doing write operation on the stack for string "/bin/shABBBBCCCC"</br>
+A) I Was using .text segment for doing write operation on text segment for string "/bin/shABBBBCCCC"</br>
    syntax:</br>
    
    section .text</br>
