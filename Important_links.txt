@@ -1,3 +1,7 @@
 https://www.csie.ntu.edu.tw/~cyy/courses/assembly/10fall/lectures/handouts/lec15_x86procedure_4up.pdf
 https://www.usna.edu/Users/cs/aviv/classes/si485h/s17/units/04/unit.html#org42891e3 (shell code variant)
-
+https://stackoverflow.com/questions/21850056/execve-shellcode-linux-segmentation-fault
+https://www.tortall.net/projects/yasm/manual/html/objfmt-elf-section.html
+https://nets.ec/Shellcode/Null-free
+https://0x00sec.org/t/linux-shellcoding-part-1-0/289
+http://www.dmi.unipg.it/bista/didattica/sicurezza-pg/buffer-overrun/hacking-book/0x2a0-writing_shellcode.html
