@@ -47,7 +47,8 @@ Syntax:</br>
  
  <b>Note:</b><br>
  
- For Linking we use -N flag : Do not page align data, do not make text readonly
+ For Linking we use -N flag : Do not page align data, do not make text readonly</br>
+ Reference: https://stackoverflow.com/questions/21850056/execve-shellcode-linux-segmentation-fault
  
 
         
