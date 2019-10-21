@@ -11,6 +11,9 @@ print "Encoded Shellcode ....."
 
 for x in bytearray(shellcode):
 	# xor encoding
+        # Note: if xor character is present in shellcode, change it 
+        # xoring same value is Zero
+
 	y = x^0xAA
 	encoded += '\\x'
 	encoded += '%02x' % y
