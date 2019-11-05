@@ -3,7 +3,6 @@ Author: Kunal Varudkar<br>
 <br>
 1. Develope a shellcode (//bin/sh)<br>
 2. Get the opcode <br>
-<br>
 Metsploit part: <br>
 3. Check for all available encoder (select any encoder you want)<br>
    <b>#msfvenom -l encoders</b><br>
@@ -14,9 +13,7 @@ Metsploit part: <br>
 5. For creating a executable shellcode<br>
    <b>#echo -ne "SHELLCODE_HERE" | msfvenom --arch x86 --platform linux -f elf -e x86/shikata_ga_nai > shellcode</b></br>
    <b>Run ./Shellcode</b><br>
-
 For Reference:
-
 
 ![alt text](https://raw.githubusercontent.com/kunalvarudkar/x86-Assembly-Language-and-Shellcoding-on-Linux/master/Shellcode/Encode_decode_using_Metasploit/Screenshot/encoder_SS.png)
 
