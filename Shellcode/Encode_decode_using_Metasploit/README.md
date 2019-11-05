@@ -12,7 +12,7 @@ Metsploit part: <br>
    <b>#echo -ne "SHELLCODE HERE" | msfvenom --arch x86 --platform linux -f c -e x86/shikata_ga_nai -i 10</b><br> 
 5. For creating a executable shellcode<br>
    <b>#echo -ne "SHELLCODE_HERE" | msfvenom --arch x86 --platform linux -f elf -e x86/shikata_ga_nai > shellcode</b></br>
-   <b>Run ./Shellcode</b><br>
+   <b>Run ./Shellcode</b><br><br>
 For Reference:
 
 ![alt text](https://raw.githubusercontent.com/kunalvarudkar/x86-Assembly-Language-and-Shellcoding-on-Linux/master/Shellcode/Encode_decode_using_Metasploit/Screenshot/encoder_SS.png)
