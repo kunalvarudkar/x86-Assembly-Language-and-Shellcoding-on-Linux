@@ -11,7 +11,7 @@ Metsploit part: <br>
    <b>#echo -ne "SHELLCODE HERE" | msfvenom --arch x86 --platform linux -f c -e x86/shikata_ga_nai</b><br>
     For increasing the encoding iteration use -i flag<br>
    <b>#echo -ne "SHELLCODE HERE" | msfvenom --arch x86 --platform linux -f c -e x86/shikata_ga_nai -i 10</b><br> 
-5. For creating a executable shellcode
+5. For creating a executable shellcode<br>
    <b>#echo -ne "SHELLCODE_HERE" | msfvenom --arch x86 --platform linux -f elf -e x86/shikata_ga_nai > shellcode</b></br>
    <b>Run ./Shellcode</b><br>
 
